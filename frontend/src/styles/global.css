@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0c;
+  --bg2: #111116;
+  --bg3: #18181f;
+  --bg4: #1e1e28;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --border3: rgba(255,255,255,0.18);
+  --text: #ede9e0;
+  --text2: #8a8680;
+  --text3: #4a4845;
+  --accent: #c8f064;
+  --accent2: #a0d040;
+  --accent-dim: rgba(200,240,100,0.12);
+  --danger: #f56565;
+  --danger-dim: rgba(245,101,101,0.12);
+  --warn: #f6ad55;
+  --warn-dim: rgba(246,173,85,0.12);
+  --info: #63b3ed;
+  --info-dim: rgba(99,179,237,0.12);
+  --success-dim: rgba(200,240,100,0.1);
+  --r: 14px;
+  --r2: 10px;
+  --r3: 8px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Syne', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+}
+
+textarea, input {
+  font-family: 'Syne', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border3);
+}
+
+::selection {
+  background: rgba(200,240,100,0.25);
+  color: var(--text);
+}
