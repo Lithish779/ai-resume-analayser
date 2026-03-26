@@ -165,4 +165,34 @@ Rules:
   }
 }
 
-module.exports = { analyzeResumeWithAI, generateImprovedResume };
+/**
+ * Handles general career-related chat queries
+ */
+async function getAIChatResponse(userQuery) {
+  console.log("💬 AI Chat Query:", userQuery);
+
+  const prompt = `You are a supportive and expert career coach and resume specialist named ResumeIQ AI.
+  
+  CONTEXT: You are part of the ResumeIQ platform, which helps users analyze resumes against job descriptions and optimize them.
+  
+  TASK: Respond to the user's career/resume-related question with actionable, professional, and encouraging advice.
+  - If the question is about ResumeIQ, explain that it helps tailor resumes to JDs.
+  - Keep the tone professional yet friendly.
+  - Use Markdown for formatting (bold, bullet points).
+  - Limit response to 2-3 short paragraphs.
+  
+  USER QUERY: ${userQuery}`;
+
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: DEFAULT_MODEL,
+    });
+    return chatCompletion.choices[0].message.content;
+  } catch (err) {
+    console.error("❌ Groq AI API Error (Chat):", err.message);
+    throw new Error("I'm sorry, I'm having trouble thinking right now. Please try again later!");
+  }
+}
+
+module.exports = { analyzeResumeWithAI, generateImprovedResume, getAIChatResponse };

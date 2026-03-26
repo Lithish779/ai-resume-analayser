@@ -1,14 +1,13 @@
 const TelegramBot = require("node-telegram-bot-api");
 const { extractTextFromFile, truncateText } = require("./utils/fileParser");
-const { analyzeResumeWithAI, generateImprovedResume } = require("./services/aiService");
+const { analyzeResumeWithAI, generateImprovedResume, getAIChatResponse } = require("./services/aiService");
 const { generateDocx } = require("./services/docxGenerator");
 const { generatePdf } = require("./services/pdfGenerator");
 const https = require("https");
-const http = require("http");
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
-// Session store: chatId -> { step, jdText, resumeText, analysis }
+// Session store: chatId -> { step, jdText, resumeText, analysis, selectedFormat, selectedFileType }
 const sessions = new Map();
 
 console.log("🤖 Telegram Bot started...");
@@ -96,7 +95,7 @@ bot.on("document", async (msg) => {
   const session = sessions.get(chatId);
 
   if (!session) {
-    return bot.sendMessage(chatId, "Please send /start to begin.", { parse_mode: "Markdown" });
+    return bot.sendMessage(chatId, "Send /start to begin a new analysis.");
   }
 
   try {
@@ -104,7 +103,6 @@ bot.on("document", async (msg) => {
 
     const { buffer, path: filePath } = await downloadTelegramFile(msg.document.file_id);
     const filename = msg.document.file_name || filePath;
-    const { extractTextFromFile } = require("./utils/fileParser");
     const text = await extractTextFromFile(buffer, filename);
     const truncated = truncateText(text, 5000);
 
@@ -123,7 +121,7 @@ bot.on("document", async (msg) => {
   }
 });
 
-// Handle text messages
+// MAIN Message Handler (Text)
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
@@ -131,28 +129,39 @@ bot.on("message", async (msg) => {
   if (!text || text.startsWith("/")) return;
 
   const session = sessions.get(chatId);
-  if (!session) {
-    return bot.sendMessage(chatId, "Send /start to begin a new analysis.");
+
+  // 1. Workflow Handlers
+  if (session) {
+    if (session.step === "await_jd") {
+      session.jdText = text;
+      session.step = "await_resume";
+      return bot.sendMessage(chatId, `✅ JD received!\n\n📋 *Step 2:* Now send me your resume as a file or paste it as text.`, { parse_mode: "Markdown" });
+    } 
+    
+    if (session.step === "await_resume") {
+      session.resumeText = text;
+      return await runAnalysis(chatId, session);
+    } 
+    
+    if (session.step === "await_keywords") {
+      if (text.toLowerCase() === "/skip") {
+        return await sendImprovedResume(chatId, session, session.selectedFormat, session.selectedFileType, []);
+      } else {
+        const keywords = text.split(/[,;\n]+/).map(k => k.trim()).filter(Boolean);
+        return await sendImprovedResume(chatId, session, session.selectedFormat, session.selectedFileType, keywords);
+      }
+    }
   }
 
-  if (session.step === "await_jd") {
-    session.jdText = text;
-    session.step = "await_resume";
-    bot.sendMessage(chatId, `✅ JD received!\n\n📋 *Step 2:* Now send me your resume as a file or paste it as text.`, { parse_mode: "Markdown" });
-  } else if (session.step === "await_resume") {
-    session.resumeText = text;
-    await runAnalysis(chatId, session);
-  } else if (session.step === "await_format") {
-    const fmt = text.toLowerCase().includes("sidebar") ? "sidebar" : text.toLowerCase().includes("modern") ? "modern" : "classic";
-    await sendImprovedResume(chatId, session, fmt);
-  } else if (session.step === "await_keywords") {
-    if (text.startsWith("/")) {
-      if (text === "/skip") {
-        await sendImprovedResume(chatId, session, session.selectedFormat, session.selectedFileType, []);
-      }
-    } else {
-      const keywords = text.split(/[,;\n]+/).map(k => k.trim()).filter(Boolean);
-      await sendImprovedResume(chatId, session, session.selectedFormat, session.selectedFileType, keywords);
+  // 2. DEFAULT: General AI Career Chat
+  if (!session || session.step === "done" || session.step === undefined) {
+    const typingMsg = await bot.sendMessage(chatId, "🤔 Let me think...");
+    try {
+      const aiResponse = await getAIChatResponse(text);
+      console.log("✅ AI Response received:", aiResponse.substring(0, 100) + "...");
+      await bot.editMessageText(aiResponse, { chat_id: chatId, message_id: typingMsg.message_id });
+    } catch (err) {
+      await bot.editMessageText(`❌ Sorry, I'm having trouble thinking. Please try /start to begin a resume analysis or ask me something later!`, { chat_id: chatId, message_id: typingMsg.message_id });
     }
   }
 });
@@ -167,8 +176,6 @@ bot.on("callback_query", async (query) => {
 
   if (data.startsWith("format_") && session) {
     session.selectedFormat = data.replace("format_", "");
-    
-    // After format, ask for file type
     await bot.sendMessage(chatId, `📂 *Format selected: ${session.selectedFormat}*\nNow choose your file type:`, {
       parse_mode: "Markdown",
       reply_markup: {
@@ -182,8 +189,6 @@ bot.on("callback_query", async (query) => {
     });
   } else if (data.startsWith("type_") && session) {
     session.selectedFileType = data.replace("type_", "");
-    
-    // Ask for keywords
     await bot.sendMessage(chatId, `✨ *Almost ready!*\n\nDo you want to add any specific keywords (e.g. AWS, Python, Teamwork) to prioritize? \n\nSend them as text, or send /skip to use only the AI suggestions.`, {
       parse_mode: "Markdown"
     });
