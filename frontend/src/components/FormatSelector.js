@@ -48,7 +48,6 @@ export default function FormatSelector({ selected, onSelect }) {
             whileTap={{ scale: 0.98 }}
             style={{
               position: 'relative',
-              background: 'var(--bg3)',
               border: isSelected ? '1.5px solid var(--accent)' : '1px solid var(--border2)',
               borderRadius: 'var(--r)',
               padding: '16px',

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, FileText, X, File } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 
 const fileIcons = {
   pdf: '📕',
