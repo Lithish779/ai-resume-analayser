@@ -1,14 +1,14 @@
 import React from 'react';
 
 export default function ScoreRing({ score, color }) {
-  const size = 180;
-  const strokeWidth = 11;
+  const size = window.innerWidth < 480 ? 140 : 180;
+  const strokeWidth = window.innerWidth < 480 ? 9 : 11;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0, margin: '0 auto' }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
         <circle
           cx={size / 2} cy={size / 2} r={radius}
@@ -34,7 +34,7 @@ export default function ScoreRing({ score, color }) {
       }}>
         <div style={{
           fontFamily: "'Instrument Serif', serif",
-          fontSize: 52,
+          fontSize: window.innerWidth < 480 ? 40 : 52,
           lineHeight: 1,
           color,
           transition: 'color 0.5s',
