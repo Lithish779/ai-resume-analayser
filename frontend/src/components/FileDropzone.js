@@ -39,7 +39,7 @@ export default function FileDropzone({ file, onFile, onRemove, accept, label, hi
             style={{
               border: `1px dashed ${isDragActive ? 'var(--accent)' : 'var(--border2)'}`,
               borderRadius: 'var(--r)',
-              padding: '36px 24px',
+              padding: 'clamp(24px, 6vw, 36px) 20px',
               textAlign: 'center',
               cursor: 'pointer',
               background: isDragActive ? 'rgba(200,240,100,0.04)' : 'var(--bg3)',

@@ -47,7 +47,7 @@ export default function TelegramModal({ onClose }) {
           background: 'var(--bg2)',
           border: '0.5px solid var(--border2)',
           borderRadius: 'var(--r)',
-          padding: '36px',
+          padding: 'clamp(24px, 6vw, 36px)',
           maxWidth: 500,
           width: '100%',
           position: 'relative',

@@ -28,8 +28,17 @@
   --info-dim: rgba(99,179,237,0.12);
   --success-dim: rgba(200,240,100,0.1);
   --r: 14px;
-  --r2: 10px;
+  --r2: 12px;
   --r3: 8px;
+  --container-px: 32px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container-px: 20px;
+    --r: 12px;
+    --r2: 10px;
+  }
 }
 
 html, body {
@@ -59,6 +68,17 @@ button {
 
 textarea, input {
   font-family: 'Syne', sans-serif;
+  font-size: 14px;
+}
+
+/* Utils */
+.mobile-only { display: none; }
+@media (max-width: 640px) {
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
+  
+  h1 { font-size: clamp(32px, 8vw, 42px) !important; }
+  p { font-size: 14px !important; }
 }
 
 ::-webkit-scrollbar {

@@ -18,7 +18,7 @@ export default function JDPage({ jdText, setJdText, jdFile, setJdFile, onNext })
       initial="initial"
       animate="animate"
       exit="exit"
-      style={{ maxWidth: 760, margin: '0 auto', padding: '56px 32px' }}
+      style={{ maxWidth: 760, margin: '0 auto', padding: 'clamp(24px, 8vw, 56px) var(--container-px)' }}
     >
       {/* Heading */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.05 } }}>
@@ -50,7 +50,7 @@ export default function JDPage({ jdText, setJdText, jdFile, setJdFile, onNext })
             onFile={setJdFile}
             onRemove={() => setJdFile(null)}
             accept={{ 'application/pdf': ['.pdf'], 'application/msword': ['.doc'], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'], 'text/plain': ['.txt'], 'text/markdown': ['.md'] }}
-            label="Drop your JD file here or click to browse"
+            label={<span style={{ display: 'block', padding: '0 4px' }}>Drop your JD file here or click to browse</span>}
             hint="PDF, DOCX, TXT, Markdown — up to 10 MB"
           />
         </div>

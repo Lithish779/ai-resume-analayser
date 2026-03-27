@@ -87,15 +87,15 @@ export default function ResultsPage({ analysisResult, jdText, resumeText, jdFile
       initial="initial"
       animate="animate"
       exit="exit"
-      style={{ maxWidth: 860, margin: '0 auto', padding: '48px 32px' }}
+      style={{ maxWidth: 860, margin: '0 auto', padding: 'clamp(32px, 6vw, 48px) var(--container-px)' }}
     >
       {/* Top Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'clamp(24px, 5vw, 48px)', flexWrap: 'wrap', gap: 16 }}>
         <div>
-          <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.12em', color: 'var(--accent)', marginBottom: 10, textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', color: 'var(--accent)', marginBottom: 8, textTransform: 'uppercase' }}>
             Step 3 of 3 — Results
           </div>
-          <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(30px, 5vw, 46px)', lineHeight: 1.15, marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 5vw, 46px)', lineHeight: 1.1, marginBottom: 12 }}>
             Your Analysis
           </h1>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 20, background: chip.bg, color: chip.color, fontSize: 12, fontWeight: 600 }}>
@@ -107,15 +107,15 @@ export default function ResultsPage({ analysisResult, jdText, resumeText, jdFile
           <motion.button
             onClick={onReset}
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 'var(--r3)', border: '0.5px solid var(--border2)', background: 'transparent', color: 'var(--text2)', fontSize: 13, fontWeight: 500, fontFamily: "'Syne', sans-serif", cursor: 'pointer' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 'var(--r3)', border: '0.5px solid var(--border2)', background: 'transparent', color: 'var(--text2)', fontSize: 13, fontWeight: 500, fontFamily: "'Syne', sans-serif", cursor: 'pointer' }}
           >
-            <RotateCcw size={14} /> Start Over
+            <RotateCcw size={14} /> <span className="desktop-only text-sm">Start Over</span><span className="mobile-only text-sm">Reset</span>
           </motion.button>
         </div>
       </div>
 
       {/* Score Hero */}
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 40, marginBottom: 48, alignItems: 'center' }}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(160px, 200px) 1fr', gap: 'clamp(20px, 5vw, 40px)', marginBottom: 'clamp(32px, 6vw, 48px)', alignItems: 'center' }}
         className="score-hero">
         <ScoreRing score={animatedScore} color={getScoreColor(score)} />
         <div>
@@ -156,7 +156,7 @@ export default function ResultsPage({ analysisResult, jdText, resumeText, jdFile
 
       {/* Keyword Analysis */}
       <Section title="Keyword Analysis">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 32 }}>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
               <CheckCircle2 size={13} /> Matched Keywords

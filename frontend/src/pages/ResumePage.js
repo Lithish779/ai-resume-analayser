@@ -60,7 +60,7 @@ export default function ResumePage({ resumeText, setResumeText, resumeFile, setR
       initial="initial"
       animate="animate"
       exit="exit"
-      style={{ maxWidth: 760, margin: '0 auto', padding: '56px 32px' }}
+      style={{ maxWidth: 760, margin: '0 auto', padding: 'clamp(24px, 8vw, 56px) var(--container-px)' }}
     >
       {/* Loading overlay */}
       {isAnalyzing && (
@@ -126,7 +126,7 @@ export default function ResumePage({ resumeText, setResumeText, resumeFile, setR
             onFile={setResumeFile}
             onRemove={() => setResumeFile(null)}
             accept={{ 'application/pdf': ['.pdf'], 'application/msword': ['.doc'], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'], 'text/plain': ['.txt'] }}
-            label="Drop your resume here or click to browse"
+            label={<span style={{ display: 'block', padding: '0 4px' }}>Drop your resume here or click to browse</span>}
             hint="PDF or DOCX preferred for best parsing results"
           />
         </div>

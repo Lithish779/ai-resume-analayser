@@ -24,16 +24,16 @@ export default function Navbar({ currentPage, goToPage, onTelegramClick, hasJD, 
       backgroundColor: 'rgba(10,10,12,0.92)',
       backdropFilter: 'blur(16px)',
       borderBottom: '0.5px solid rgba(255,255,255,0.07)',
-      padding: '0 32px',
+      padding: '0 var(--container-px)',
       height: 64,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 24,
+      gap: 'clamp(12px, 3vw, 24px)',
     }}>
       {/* Logo */}
       <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, color: 'var(--accent)', letterSpacing: '-0.5px', flexShrink: 0 }}>
-        Resume<span style={{ color: 'var(--text3)' }}>IQ</span>
+        ResumeIQ
       </div>
 
       {/* Steps */}
@@ -51,7 +51,7 @@ export default function Navbar({ currentPage, goToPage, onTelegramClick, hasJD, 
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
-                  padding: '6px 14px',
+                  padding: '6px 12px',
                   borderRadius: 20,
                   border: isActive ? '0.5px solid rgba(200,240,100,0.3)' : '0.5px solid transparent',
                   background: isActive ? 'rgba(200,240,100,0.08)' : 'transparent',
@@ -74,11 +74,10 @@ export default function Navbar({ currentPage, goToPage, onTelegramClick, hasJD, 
                 }}>
                   {isDone ? '✓' : step.num}
                 </span>
-                <span style={{ display: 'none' }} className="step-label">{step.label}</span>
-                <span style={{ '@media(minWidth:640px)': { display: 'inline' } }}>{step.label}</span>
+                <span className="desktop-only">{step.label}</span>
               </motion.button>
               {i < steps.length - 1 && (
-                <div style={{ width: 20, height: 1, background: 'var(--border)', flexShrink: 0 }} />
+                <div style={{ width: 'clamp(10px, 2vw, 20px)', height: i === 0 || i === 1 ? '1px' : 0, background: 'var(--border)', flexShrink: 0 }} />
               )}
             </React.Fragment>
           );
@@ -94,7 +93,7 @@ export default function Navbar({ currentPage, goToPage, onTelegramClick, hasJD, 
           display: 'flex',
           alignItems: 'center',
           gap: 7,
-          padding: '7px 16px',
+          padding: '7px 14px',
           borderRadius: 20,
           border: '0.5px solid var(--border2)',
           background: 'transparent',
@@ -107,7 +106,7 @@ export default function Navbar({ currentPage, goToPage, onTelegramClick, hasJD, 
         }}
       >
         <Send size={14} />
-        Telegram Bot
+        <span className="desktop-only">Telegram Bot</span>
       </motion.button>
     </nav>
   );
