@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Send, Copy, Check } from 'lucide-react';
 
-const BOT_USERNAME = 'ResumeIQ_bot'; // Replace with your actual bot username
+const BOT_USERNAME = 'resume_pdf_analyzer_bot'; // Updated with actual bot username
 const BOT_LINK = `https://t.me/${BOT_USERNAME}`;
 
 const steps = [

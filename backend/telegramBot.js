@@ -70,7 +70,14 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     chatId,
     `👋 Welcome to *ResumeIQ Bot*!\n\nI'll analyze your resume against a job description and give you a match score + recommendations.\n\n📄 *Step 1:* Send me the Job Description (JD) as a file (PDF, DOCX, TXT) or paste it as text.`,
-    { parse_mode: "Markdown" }
+    { 
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "🌐 Visit Web Dashboard", url: process.env.FRONTEND_URL || "http://localhost:3000" }]
+        ]
+      }
+    }
   );
 });
 
@@ -223,6 +230,9 @@ async function runAnalysis(chatId, session) {
             { text: "✨ Modern", callback_data: "format_modern" },
             { text: "💼 Professional", callback_data: "format_professional" },
           ],
+          [
+            { text: "🌐 Visit Web Dashboard", url: process.env.FRONTEND_URL || "http://localhost:3000" }
+          ]
         ],
       },
     });
